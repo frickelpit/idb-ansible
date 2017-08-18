@@ -1,0 +1,6 @@
+---
+- name: reload upstart
+  service:
+    name: initctl
+    state: restarted
+...

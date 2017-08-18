@@ -1,0 +1,5 @@
+---
+repo_cert: idb.crt
+repo_key: idb.key
+idb_vhost: idb.test.local
+...
