@@ -3,7 +3,8 @@
   copy:
     src: "files/sidekiq.conf"
     dest: "/etc/init/sidekiq.conf"
-  notify: reload upstart
+  notify:
+    - reload upstart
   tags:
     - sidekiq
 ...
