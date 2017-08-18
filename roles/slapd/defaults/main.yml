@@ -1,0 +1,7 @@
+---
+slapd_domain: idb.test.local
+slapd_organization: idb-test
+slapd_root_password: passme
+
+config_base: dc=test,dc=local
+config_uri: ldap://localhost ldap://localhost:666

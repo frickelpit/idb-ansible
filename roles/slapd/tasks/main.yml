@@ -9,4 +9,92 @@
     - ldapvi
   tags:
     - slapd
+
+- name: debconf no configuration
+  debconf:
+    name: slapd
+    question: slapd/no_configuration
+    value: false
+    vtype: boolean
+  tags:
+    - slapd
+
+- name: debconf domain name
+  debconf:
+    name: slapd
+    question: slapd/domain
+    value: "{{ slapd_domain | default(ansible_fqdn) }}"
+    vtype: "string"
+  tags:
+    - slapd
+
+- name: debconf organization
+  debconf:
+    name: slapd
+    question: slapd/organization
+    value: "{{ slapd_organization }}"
+    vtype: "string"
+  tags:
+    - slapd
+
+- name: debconf root password
+  debconf:
+    name: slapd
+    question: "{{ item }}"
+    value: "{{ slapd_root_password }}"
+    vtype: "password"
+  with_items:
+    - slapd/root_password
+    - slapd/root_password_again
+    - slapd/internal/adminpw password
+    - slapd/internal/generated_adminpw
+    - slapd/password1
+    - slapd/password2
+  tags:
+    - slapd
+
+- name: debconf backend
+  debconf:
+    name: slapd
+    question: slapd/backend
+    value: "MDB"
+    vtype: "string"
+  tags:
+    - slapd
+
+- name: debconf database purge
+  debconf:
+    name: slapd
+    question: slapd/purge_database
+    value: false
+    vtype: boolean
+  tags:
+    - slapd
+
+- name: debconf old database move
+  debconf:
+    name: slapd
+    question: slapd/move_old_database
+    value: true
+    vtype: boolean
+  tags:
+    - slapd
+
+- name: debconf older ldap version
+  debconf:
+    name: slapd
+    question: slapd/allow_ldap_v2
+    value: false
+    vtype: boolean
+  tags:
+    - slapd
+
+- name: Copy ldap config
+  template:
+    src: ldap.conf.j2
+    dest: /etc/ldap/ldap.conf
+  tags:
+    - slapd
+  notify:
+    - restart slapd
 ...
