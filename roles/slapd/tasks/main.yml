@@ -1,55 +1,8 @@
 ---
-- name: Install LDAP server
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - slapd
-    - ldap-utils
-    - ldapvi
-  tags:
-    - slapd
+- include_tasks: debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: debconf configuration
-  debconf:
-    name: slapd
-    question: "slapd/{{ item.question }}"
-    value: "{{ item.value }}"
-    vtype: "{{ item.vtype | default ('select') }}"
-  with_items:
-    - question: no_configuration
-      value: false
-      vtype: boolean
-    - question: domain
-      value: "{{ slapd_domain | default(ansible_fqdn) }}"
-      vtype: "string"
-    - question: organization
-      value: "{{ slapd_organization }}"
-      vtype: "string"
-    - question: password
-      value: "{{ slapd_root_password }}"
-      vtype: "password"
-    - question: backend
-      value: "MDB"
-      vtype: "string"
-    - question: purge_database
-      value: false
-      vtype: boolean
-    - question: move_old_database
-      value: true
-      vtype: boolean
-    - question: allow_ldap_v2
-      value: false
-      vtype: boolean
-  tags:
-    - slapd
+- include_tasks: redhat.yml
+  when: ansible_os_family == 'RedHat'
 
-- name: Copy ldap config
-  template:
-    src: ldap.conf.j2
-    dest: /etc/ldap/ldap.conf
-  tags:
-    - slapd
-  notify:
-    - restart slapd
 ...

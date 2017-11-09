@@ -10,4 +10,5 @@
     - sidekiq
     - rake
 
-...
+  handlers:
+    - import_tasks: handlers/main.yml
